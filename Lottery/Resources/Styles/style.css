@@ -1,0 +1,56 @@
+﻿/* === GLOBALNE === */
+^ContentPage {
+    background-color: #121212;
+    padding: 20;
+}
+
+/* === SHELL (TYTUŁ) === */
+^Shell {
+    -Maui-Shell-TitleColor: White;
+    -Maui-Shell-Background: #1E1E1E;
+}
+
+/* === PRZYCISKI (KLASY) === */
+.primaryButton {
+    background-color: #2962FF;
+    color: White;
+    border-radius: 8;
+    padding: 14;
+    margin: 10 0;
+}
+
+.dangerButton {
+    background-color: #D32F2F;
+}
+
+/* === LISTA (ID) === */
+#studentsListView {
+    background-color: #1E1E1E;
+    separator-color: #333;
+    margin: 10 0;
+}
+
+/* === FORMY === */
+^Picker {
+    height: 50;
+    font-size: 16;
+    background-color: #FFFFFF;
+    color: #000000;
+    padding: 15;
+}
+
+    ^Picker .picker-title {
+        color: #1976D2;
+        font-weight: bold;
+    }
+
+/* === WYNIK (ID) === */
+#resultLabel {
+    color: #2962FF;
+    font-size: 20;
+    text-align: center;
+    margin: 20 0;
+    padding: 15;
+    background-color: #1E1E1E;
+    border-radius: 8;
+}
