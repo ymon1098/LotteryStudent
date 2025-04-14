@@ -1,80 +1,66 @@
 using Lottery.Models;
+
 namespace Lottery.Views;
 
 public partial class MainPage : ContentPage
 {
-    private readonly ClassManager _classManager = new();
-    private string _selectedClass;
+    private ClassManager classManager = new();
 
     public MainPage()
     {
         InitializeComponent();
-        LoadClasses();
     }
 
-    private void LoadClasses()
+    private void OnAddClassClicked(object sender, EventArgs e)
     {
-        classPicker.ItemsSource = _classManager.GetClasses();
+        var className = ClassEntry.Text?.Trim();
+        if (!string.IsNullOrWhiteSpace(className))
+        {
+            classManager.AddClass(className);
+            RefreshClassPicker();
+            ClassEntry.Text = string.Empty;
+        }
+    }
+
+    private void RefreshClassPicker()
+    {
+        ClassPicker.ItemsSource = null;
+        ClassPicker.ItemsSource = classManager.Classes;
     }
 
     private void OnClassSelected(object sender, EventArgs e)
     {
-        _selectedClass = classPicker.SelectedItem?.ToString();
-        if (_selectedClass != null)
+ 
+    }
+
+    private void OnAddStudentClicked(object sender, EventArgs e)
+    {
+        var studentName = StudentEntry.Text?.Trim();
+        if (ClassPicker.SelectedItem is ClassModel selectedClass &&
+            !string.IsNullOrWhiteSpace(studentName))
         {
-            studentsListView.ItemsSource = _classManager.GetStudents(_selectedClass);
+            classManager.AddStudent(selectedClass.Name, studentName);
+            StudentEntry.Text = string.Empty;
         }
     }
 
-    private async void OnAddStudent(object sender, EventArgs e)
+    private void OnDrawStudentClicked(object sender, EventArgs e)
     {
-        if (string.IsNullOrWhiteSpace(_selectedClass))
+        if (ClassPicker.SelectedItem is ClassModel selectedClass)
         {
-            await DisplayAlert("B³¹d", "Najpierw wybierz klasê!", "OK");
-            return;
-        }
-
-        string name = await DisplayPromptAsync("Nowy uczeñ", "Wpisz imiê i nazwisko:");
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            _classManager.AddStudent(_selectedClass, new Student { Name = name });
-            RefreshStudentList();
-        }
-    }
-
-    private async void OnDeleteStudent(object sender, EventArgs e)
-    {
-        if (studentsListView.SelectedItem is Student selected)
-        {
-            bool confirm = await DisplayAlert("PotwierdŸ", $"Usun¹æ {selected.Name}?", "Tak", "Nie");
-            if (confirm)
+            var student = classManager.GetRandomStudent(selectedClass.Name);
+            if (student != null)
             {
-                _classManager.RemoveStudent(_selectedClass, selected);
-                RefreshStudentList();
+                ResultLabel.Text = $"Wylosowano: {student.Name}";
+            }
+            else
+            {
+                ResultLabel.Text = "Brak uczniów w tej klasie.";
             }
         }
         else
         {
-            await DisplayAlert("B³¹d", "Zaznacz ucznia do usuniêcia", "OK");
+            ResultLabel.Text = "Najpierw wybierz klasê.";
         }
-    }
-
-    private void OnDrawStudent(object sender, EventArgs e)
-    {
-        var students = _classManager.GetStudents(_selectedClass);
-        if (students.Count == 0)
-        {
-            resultLabel.Text = "Brak uczniów w klasie!";
-            return;
-        }
-
-        var random = new Random();
-        var winner = students[random.Next(students.Count)];
-        resultLabel.Text = $"Wylosowano: {winner.Name}";
-    }
-
-    private void RefreshStudentList()
-    {
-        studentsListView.ItemsSource = _classManager.GetStudents(_selectedClass);
     }
 }

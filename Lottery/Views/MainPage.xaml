@@ -1,60 +1,27 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Lottery.Views.MainPage"
-             Title="Losowanie odpowiedzi">
+             Title="Losowanie osoby do odpowiedzi">
 
-    <StackLayout Padding="20" Spacing="15">
-        <!-- Wybór klasy -->
-        <Picker x:Name="classPicker"
-        Title="Wybierz klasę"
-        HeightRequest="50" 
-            FontSize="16"
-        Margin="0,10"
-        BackgroundColor="LightGray"
-        TextColor="Black"
-        SelectedIndexChanged="OnClassSelected">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>1A</x:String>
-                    <x:String>1B</x:String>
-                    <x:String>2A</x:String>
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+    <VerticalStackLayout Padding="20" Spacing="15">
 
-        <!-- Lista uczniów -->
-        <ListView x:Name="studentsListView" HeightRequest="250">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Label Text="Dodaj klasę:" />
+        <HorizontalStackLayout>
+            <Entry x:Name="ClassEntry" Placeholder="Nazwa klasy" />
+            <Button Text="Dodaj" Clicked="OnAddClassClicked" />
+        </HorizontalStackLayout>
 
-        <!-- Przyciski akcji -->
-        <Button Text="Dodaj ucznia" 
-                Clicked="OnAddStudent"
-                BackgroundColor="#1976D2"
-                TextColor="White"/>
+        <Picker x:Name="ClassPicker" Title="Wybierz klasę"
+                SelectedIndexChanged="OnClassSelected" />
 
-        <Button Text="Usuń ucznia" 
-                Clicked="OnDeleteStudent"
-                BackgroundColor="#FF5722"
-                TextColor="White"/>
+        <Label Text="Dodaj ucznia:" />
+        <HorizontalStackLayout>
+            <Entry x:Name="StudentEntry" Placeholder="Imię ucznia" />
+            <Button Text="Dodaj" Clicked="OnAddStudentClicked" />
+        </HorizontalStackLayout>
 
-        <Button Text="LOSUJ" 
-                Clicked="OnDrawStudent"
-                FontSize="18"
-                FontAttributes="Bold"
-                BackgroundColor="#4CAF50"
-                TextColor="White"/>
+        <Button Text="Wylosuj ucznia" Clicked="OnDrawStudentClicked" />
+        <Label x:Name="ResultLabel" />
 
-        <!-- Wynik losowania -->
-        <Label x:Name="resultLabel" 
-               FontSize="20"
-               HorizontalOptions="Center"
-               TextColor="#1976D2"
-               FontAttributes="Bold"/>
-    </StackLayout>
+    </VerticalStackLayout>
 </ContentPage>
